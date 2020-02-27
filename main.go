@@ -35,6 +35,37 @@ func realpath(file string) string {
 	return path + "/" + file
 }
 
+// ipAllowed will determine if the request ip is allowed
+// or not.
+func ipAllowedMiddleware(c *config.Config, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var ip string
+
+		if o1 := r.Header.Get("X-Forwarded-For"); o1 != "" {
+			ip = o1
+		} else if o2 := r.Header.Get("x-forwarded-for"); o2 != "" {
+			ip = o2
+		} else if o3 := r.Header.Get("X-FORWARDED-FOR"); o3 != "" {
+			ip = o3
+		}
+
+		if len(c.AllowedIPs) == 0 {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		for _, i := range c.AllowedIPs {
+			if ip == i {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
+
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(http.StatusText(http.StatusUnauthorized)))
+	})
+}
+
 func main() {
 	flag.Parse()
 
@@ -47,7 +78,7 @@ func main() {
 	}
 
 	// Index route.
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/", ipAllowedMiddleware(c, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		links, err := json.Marshal(c.Links)
 
 		if err != nil {
@@ -63,34 +94,34 @@ func main() {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-	})
+	})))
 
 	// Assets route.
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(realpath(*publicFlag)+"/assets"))))
+	http.Handle("/assets/", ipAllowedMiddleware(c, http.StripPrefix("/assets/", http.FileServer(http.Dir(realpath(*publicFlag)+"/assets")))))
 
 	// Config api route.
-	http.HandleFunc("/api/config", handlers.ConfigHandler)
+	http.Handle("/api/config", ipAllowedMiddleware(c, http.HandlerFunc(handlers.ConfigHandler)))
 
 	// Containers api route.
-	http.HandleFunc("/api/containers", handlers.ContainersHandler)
+	http.Handle("/api/containers", ipAllowedMiddleware(c, http.HandlerFunc(handlers.ContainersHandler)))
 
 	// Database api route.
-	http.HandleFunc("/api/database", handlers.DatabaseHandler)
+	http.Handle("/api/database", ipAllowedMiddleware(c, http.HandlerFunc(handlers.DatabaseHandler)))
 
 	// BitBucket service route.
-	http.HandleFunc("/services/bitbucket", handlers.BitbucketHandler)
+	http.Handle("/services/bitbucket", ipAllowedMiddleware(c, http.HandlerFunc(handlers.BitbucketHandler)))
 
 	// GitHub service route.
-	http.HandleFunc("/services/github", handlers.GithubHandler)
+	http.Handle("/services/github", ipAllowedMiddleware(c, http.HandlerFunc(handlers.GithubHandler)))
 
 	// GitLab service route.
-	http.HandleFunc("/services/gitlab", handlers.GitlabHandler)
+	http.Handle("/services/gitlab", ipAllowedMiddleware(c, http.HandlerFunc(handlers.GitlabHandler)))
 
 	// Jira service route.
-	http.HandleFunc("/services/jira", handlers.JiraHandler)
+	http.Handle("/services/jira", ipAllowedMiddleware(c, http.HandlerFunc(handlers.JiraHandler)))
 
 	// Test service route.
-	http.HandleFunc("/services/test", handlers.TestHandler)
+	http.Handle("/services/test", ipAllowedMiddleware(c, http.HandlerFunc(handlers.TestHandler)))
 
 	fmt.Printf("Listening to http://%s\n", c.Listen)
 

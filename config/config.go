@@ -37,7 +37,8 @@ func Init(s string) {
 
 // Config represents a config struct.
 type Config struct {
-	Database struct {
+	AllowedIPs []string `json:"allowed_ips"`
+	Database   struct {
 		Container string
 		Password  string
 		Prefix    string
