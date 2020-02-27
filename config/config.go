@@ -58,6 +58,7 @@ type Config struct {
 		Exclude []string
 	}
 	Title string
+	Style map[string]string
 }
 
 type MenuItem struct {

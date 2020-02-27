@@ -85,10 +85,16 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
+		var styles string
+		for key := range c.Style {
+			styles += fmt.Sprintf("%s { %s }\n", key, c.Style[key])
+		}
+
 		templates := template.Must(template.ParseFiles(realpath(*publicFlag) + "/index.html"))
 		err = templates.ExecuteTemplate(w, "index.html", map[string]interface{}{
 			"Config": c,
 			"Links":  template.JS(string(links)),
+			"Styles": template.CSS(styles),
 		})
 
 		if err != nil {
