@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/isotopsweden/docker-farmer/config"
-	"github.com/isotopsweden/docker-farmer/handlers"
 	"github.com/kardianos/osext"
+	"github.com/stfturist/docker-farmer/config"
+	"github.com/stfturist/docker-farmer/handlers"
 )
 
 var (

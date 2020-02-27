@@ -8,7 +8,7 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/isotopsweden/docker-farmer/config"
+	"github.com/stfturist/docker-farmer/config"
 )
 
 // getDockerClient will return the Docker client or error.

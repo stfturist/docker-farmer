@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/docker/docker/api/types"
-	"github.com/isotopsweden/docker-farmer/config"
-	"github.com/isotopsweden/docker-farmer/docker"
+	"github.com/stfturist/docker-farmer/config"
+	"github.com/stfturist/docker-farmer/docker"
 )
 
 // ConfigHandler will handle the config api route.

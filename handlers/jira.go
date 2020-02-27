@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/isotopsweden/docker-farmer/config"
-	"github.com/isotopsweden/docker-farmer/docker"
+	"github.com/stfturist/docker-farmer/config"
+	"github.com/stfturist/docker-farmer/docker"
 )
 
 // jiraPayload contains the payload from Jira.
