@@ -49,12 +49,19 @@ type Config struct {
 		Host    string
 		Version string
 	}
+	Logo       string
 	Links      map[string]string
 	Listen     string
+	Menu       []*MenuItem
 	Containers struct {
 		Exclude []string
 	}
 	Title string
+}
+
+type MenuItem struct {
+	Title string
+	Link  string
 }
 
 // Get will return the config struct.
