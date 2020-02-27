@@ -11,6 +11,10 @@ $(function() {
     var restartLink = '<a href="#" class="restart text-blue-600 hover:text-blue-900 focus:outline-none focus:underline">Restart</a>';
     var deleteLink = '<a href="#" class="delete text-red-600 hover:text-red-900 focus:outline-none focus:underline">Delete</a>';
 
+    if (!containers) {
+        containers = [];
+    }
+
     for (var i = 0, l = containers.length; i < l; i++) {
       var container = containers[i];
       var url = container.Names[0].substr(1);
