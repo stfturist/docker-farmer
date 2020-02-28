@@ -102,32 +102,21 @@ func main() {
 		}
 	})))
 
-	// Assets route.
-	http.Handle("/assets/", ipAllowedMiddleware(c, http.StripPrefix("/assets/", http.FileServer(http.Dir(realpath(*publicFlag)+"/assets")))))
+	routes := map[string]http.Handler{
+		"/assets/":            http.StripPrefix("/assets/", http.FileServer(http.Dir(realpath(*publicFlag)+"/assets"))),
+		"/api/config":         http.HandlerFunc(handlers.ConfigHandler),
+		"/api/containers":     http.HandlerFunc(handlers.ContainersHandler),
+		"/api/database":       http.HandlerFunc(handlers.DatabaseHandler),
+		"/services/bitbucket": http.HandlerFunc(handlers.BitbucketHandler),
+		"/services/github":    http.HandlerFunc(handlers.GithubHandler),
+		"/services/gitlab":    http.HandlerFunc(handlers.GitlabHandler),
+		"/services/jira":      http.HandlerFunc(handlers.JiraHandler),
+		"/services/test":      http.HandlerFunc(handlers.TestHandler),
+	}
 
-	// Config api route.
-	http.Handle("/api/config", ipAllowedMiddleware(c, http.HandlerFunc(handlers.ConfigHandler)))
-
-	// Containers api route.
-	http.Handle("/api/containers", ipAllowedMiddleware(c, http.HandlerFunc(handlers.ContainersHandler)))
-
-	// Database api route.
-	http.Handle("/api/database", ipAllowedMiddleware(c, http.HandlerFunc(handlers.DatabaseHandler)))
-
-	// BitBucket service route.
-	http.Handle("/services/bitbucket", ipAllowedMiddleware(c, http.HandlerFunc(handlers.BitbucketHandler)))
-
-	// GitHub service route.
-	http.Handle("/services/github", ipAllowedMiddleware(c, http.HandlerFunc(handlers.GithubHandler)))
-
-	// GitLab service route.
-	http.Handle("/services/gitlab", ipAllowedMiddleware(c, http.HandlerFunc(handlers.GitlabHandler)))
-
-	// Jira service route.
-	http.Handle("/services/jira", ipAllowedMiddleware(c, http.HandlerFunc(handlers.JiraHandler)))
-
-	// Test service route.
-	http.Handle("/services/test", ipAllowedMiddleware(c, http.HandlerFunc(handlers.TestHandler)))
+	for path, handler := range routes {
+		http.Handle(path, ipAllowedMiddleware(c, handler))
+	}
 
 	fmt.Printf("Listening to http://%s\n", c.Listen)
 
