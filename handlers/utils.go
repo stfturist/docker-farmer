@@ -9,11 +9,23 @@ import (
 
 // stringInSlice returns true if a string exists or false if not.
 func stringInSlice(a string, list []string) bool {
+	a = strings.ToLower(a)
+
 	for _, b := range list {
-		if strings.ToLower(b) == strings.ToLower(a) {
+		b = strings.ToLower(b)
+		if b == a {
 			return true
 		}
+
+		if strings.Contains(a, "*") {
+			a = strings.Replace(a, "*", "", -1)
+
+			if strings.Contains(b, a) {
+				return true
+			}
+		}
 	}
+
 	return false
 }
 
