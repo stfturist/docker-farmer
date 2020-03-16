@@ -17,10 +17,9 @@ func stringInSlice(a string, list []string) bool {
 			return true
 		}
 
-		if strings.Contains(a, "*") {
-			a = strings.Replace(a, "*", "", -1)
-
-			if strings.Contains(b, a) {
+		if strings.Contains(b, "*") {
+			b = strings.Replace(b, "*", "", -1)
+			if strings.Contains(a, b) {
 				return true
 			}
 		}
