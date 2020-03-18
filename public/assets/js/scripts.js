@@ -98,7 +98,7 @@ $(function() {
 
             if (add) {
               links.push(
-                '<a class="btn" href="' +
+                '<a class="text-blue-600 hover:text-blue-900 focus:outline-none focus:underline" href="' +
                   link +
                   '" target="_blank">' +
                   key +
