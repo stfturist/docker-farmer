@@ -74,6 +74,7 @@ $(function() {
         if (typeof farmer !== 'undefined') {
           var values = {
             '{id}': /(\w+\-\d+)/.exec(url),
+            '{num}': /(\d+)/.exec(url),
             '{url}': url
           };
 
