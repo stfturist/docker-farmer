@@ -8,11 +8,13 @@ $(function() {
     var $sites = $('.sites table tbody');
     var keys = ['Id', 'Image', 'State', 'Status'];
     var keep = [];
-    var restartLink = '<a href="#" class="restart text-blue-600 hover:text-blue-900 focus:outline-none focus:underline">Restart</a>';
-    var deleteLink = '<a href="#" class="delete text-red-600 hover:text-red-900 focus:outline-none focus:underline">Delete</a>';
+    var restartLink =
+      '<a href="#" class="restart text-blue-600 hover:text-blue-900 focus:outline-none focus:underline">Restart</a>';
+    var deleteLink =
+      '<a href="#" class="delete text-red-600 hover:text-red-900 focus:outline-none focus:underline">Delete</a>';
 
     if (!containers) {
-        containers = [];
+      containers = [];
     }
 
     for (var i = 0, l = containers.length; i < l; i++) {
@@ -109,8 +111,10 @@ $(function() {
         }
 
         html.push(
-          '<td class="container-actions px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium"><div class=" flex justify-around">' + restartLink + deleteLink +
+          '<td class="container-actions px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium"><div class=" flex justify-around">' +
             links.join('') +
+            restartLink +
+            deleteLink +
             '</div></td>'
         );
         html.push('</tr>');
