@@ -87,7 +87,7 @@ $(function() {
             for (var v in values) {
               var val = values[v];
 
-              if (v === '{id}') {
+              if (v === '{id}' || v === '{num}') {
                 if (val && val.length) {
                   link = link.replace(v, val[0].toUpperCase());
                 } else {
