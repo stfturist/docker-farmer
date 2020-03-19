@@ -53,10 +53,12 @@ func ContainersHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		base := strings.Replace(domain, "."+c.Domain, "", -1)
-		if c.DeployPath != "" {
-			domainPath := path.Join(c.DeployPath, base)
-			if _, err := os.Stat(domainPath); !os.IsNotExist(err) {
-				os.RemoveAll(domainPath)
+		if len(c.DeployPaths) > 0 {
+			for _, deployPath := range c.DeployPaths {
+				domainPath := path.Join(deployPath, base)
+				if _, err := os.Stat(domainPath); !os.IsNotExist(err) {
+					os.RemoveAll(domainPath)
+				}
 			}
 		}
 
