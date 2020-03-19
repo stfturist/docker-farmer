@@ -45,8 +45,9 @@ type Config struct {
 		Type      string
 		User      string
 	}
-	Domain string
-	Docker struct {
+	DeployPath string `json:"deploy_path"`
+	Domain     string
+	Docker     struct {
 		Host    string
 		Version string
 	}

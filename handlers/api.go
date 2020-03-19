@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"path"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/stfturist/docker-farmer/config"
@@ -47,6 +50,14 @@ func ContainersHandler(w http.ResponseWriter, r *http.Request) {
 		data = map[string]interface{}{
 			"count":   count,
 			"success": err == nil,
+		}
+
+		base := strings.Replace(domain, "."+c.Domain, "", -1)
+		if c.DeployPath != "" {
+			domainPath := path.Join(c.DeployPath, base)
+			if _, err := os.Stat(domainPath); !os.IsNotExist(err) {
+				os.RemoveAll(domainPath)
+			}
 		}
 
 		break
