@@ -41,6 +41,7 @@ func ContainersHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch action {
 	case "delete":
+		fmt.Printf("Delete container %s\n", domain)
 		count, err := docker.RemoveContainers(domain)
 
 		if err != nil {
@@ -57,7 +58,9 @@ func ContainersHandler(w http.ResponseWriter, r *http.Request) {
 			for _, deployPath := range c.DeployPaths {
 				domainPath := path.Join(deployPath, base)
 				if _, err := os.Stat(domainPath); !os.IsNotExist(err) {
-					os.RemoveAll(domainPath)
+					if err := os.RemoveAll(domainPath); err == nil {
+						fmt.Printf("Deleted path %s\n", domainPath)
+					}
 				}
 			}
 		}
@@ -65,6 +68,7 @@ func ContainersHandler(w http.ResponseWriter, r *http.Request) {
 		break
 	default:
 		if action == "restart" {
+			fmt.Printf("Restart container %s\n", domain)
 			_, err := docker.RestartContainers(domain)
 
 			if err != nil {
